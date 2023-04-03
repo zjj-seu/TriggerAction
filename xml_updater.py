@@ -5,7 +5,7 @@ import xml.dom.minidom as minidom
 # 更新xml文件的通用类
 # 功能1：create_Element:创建一个节点，指定tag和attrib,tag和attrib存在同一个字典里
 # 功能2：add_SubElements为指定节点创建数个子节点，数个子节点name和text存储在同一个字典里
-# 功能3：add_selected_SubElement:连接两个节点的从属关系。
+# 功能3：add_selected_SubElement:连接两个节点的从属关系
 
 class xmlUpdater:
     def __init__(self, filepath:str) -> None:
