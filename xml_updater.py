@@ -28,6 +28,7 @@ class xmlUpdater:
             subelement = ET.SubElement(fathernote,key)
             subelement.text = value
 
+    # TODO 测试
     def add_selected_SubElement(self,fathernode:ET.Element,childrennode:ET.Element):
         subelement = ET.SubElement(fathernode,tag=childrennode.tag, attrib=childrennode.attrib)
         subelement.text = childrennode.text
