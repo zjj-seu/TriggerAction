@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<devices>
+	<device id="(did)">
+		<did>(did)</did>
+		<name>(name)</name>
+		<ip>(lan ipv4)</ip>
+		<token>(device token)</token>
+	</device>
+	<device id="317934913_cn">
+		<name>台灯</name>
+		<did>317934913</did>
+		<ip>192.168.3.54</ip>
+		<token>9490458620e6604d712ccad862bc32b6</token>
+	</device>
+	<device id="108412119_cn">
+		<name>小爱音箱 万能遥控版</name>
+		<did>108412119</did>
+		<ip>192.168.3.64</ip>
+		<token>704e665a31787076614f354950436c6f</token>
+	</device>
+	<device id="ir.1543249323641991168_cn">
+		<name>空调</name>
+		<did>ir.1543249323641991168</did>
+		<ip/>
+		<token/>
+	</device>
+</devices>

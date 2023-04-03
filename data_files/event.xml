@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<events>
+	<event id="(did)" name="(name)">
+		<trigger type="status">
+            <targetdevicedid>(IoTdid)</targetdevicedid>
+            <targetstatus>on</targetstatus>
+        </trigger>
+        </condition>
+        <action type="status">
+            <targetdevicedid>(IoTdid)</targetdevicedid>
+            <targetstatus>off</targetstatus>
+        </action>
+	</event>
+    <event id="(did)" name="(name)">
+		<trigger type="time">
+            <targetdevicedid>(IoTdid)</targetdevicedid>
+            <targettime>18:00</targettime>
+        </trigger>
+        </condition>
+        <action type="status">
+            <targetdevicedid>(IoTdid)</targetdevicedid>
+            <targetstatus>on</targetstatus>
+        </action>
+	</event>
+</events>

@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<types>
+	<type name="status">
+        <parm id="1">targetdevicedid</parm>
+        <parm id="2">targetstatus</parm>
+    </type>
+	<type name="time">
+        <parm id="1">targetdevicedid</parm>
+        <parm id="2">targettime</parm>
+    </type>
+</types>
