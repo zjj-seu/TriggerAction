@@ -31,6 +31,7 @@ class EventFetcher():
 
         # 根据元数据获取事件
         """
+        本项目事件集合采用字典嵌套的树形结构
         eg.
         {
         '001': {'id': '001', 'name': 'save energy', 'status': 'on', 
