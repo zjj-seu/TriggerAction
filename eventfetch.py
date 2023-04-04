@@ -30,11 +30,41 @@ class EventFetcher():
         
 
         # 根据元数据获取事件
+        """
+        eg.
+        {
+        '001': {'id': '001', 'name': 'save energy', 'status': 'on', 
+                'eventdetails': {'trigger': {'type': 'status', 
+                                            'targetdevicedid': '317934913', 
+                                            'targetstatus': 'on', 
+                                            'targetdevicename': '台灯'}, 
+                                'conditions': {'1': {'type': 'time', 
+                                                    'id': '1', 
+                                                    'targettimefrom': '18:00', 
+                                                    'targettimeto': '18:10'}}, 
+                                'actions': {'1': {'type': 'status', 
+                                                'id': '1', 
+                                                'targetdevicedid': '317934913', 
+                                                'targetstatus': 'off', 
+                                                'targetdevicename': '台灯'}}}}, 
+        '002': {'id': '002', 'name': 'sleep time', 'status': 'on', 
+                'eventdetails': {'trigger': {'type': 'time', 
+                                            'targettimefrom': '18:00', 
+                                            'targettimeto': '18:10'}, 
+                                'conditions': {}, 
+                                'actions': {'1': {'type': 'status', 
+                                                'id': '1', 
+                                                'targetdevicedid': '317934913', 
+                                                'targetstatus': 'on', 
+                                                'targetdevicename': '台灯'}}}}
+        }
+        """
         total_events = dict()
         for child in self.event_root:
             print(str(child.tag)+"\t"+str(child.attrib))
             event_id = child.attrib["id"]
             event_name = child.attrib["name"]
+            event_status = child.attrib["status"]
 
             event = dict()
             eventdetails = dict()
@@ -42,6 +72,7 @@ class EventFetcher():
 
             event["id"] = event_id
             event["name"] = event_name
+            event["status"] = event_status
             event["eventdetails"] = eventdetails
 
             for grandchild in child:
