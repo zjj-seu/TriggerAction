@@ -1,11 +1,12 @@
 <?xml version="1.0" ?>
 <types>
 	<type name="status">
-        <parm id="1">targetdevicedid</parm>
-        <parm id="2">targetstatus</parm>
+        <param id="1">targetdevicedid</param>
+        <param id="2">targetstatus</param>
+        <param id="3">targetdevicename</param>
     </type>
 	<type name="time">
-        <parm id="1">targetdevicedid</parm>
-        <parm id="2">targettime</parm>
+        <param id="1">targettimefrom</param>
+        <param id="2">targettimeto</param>
     </type>
 </types>

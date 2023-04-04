@@ -1,25 +1,37 @@
 <?xml version="1.0" ?>
 <events>
-	<event id="(did)" name="(name)">
+	<event id="001" name="save energy">
 		<trigger type="status">
-            <targetdevicedid>(IoTdid)</targetdevicedid>
+            <targetdevicename>台灯</targetdevicename>
+            <targetdevicedid>317934913</targetdevicedid>
             <targetstatus>on</targetstatus>
         </trigger>
-        </condition>
-        <action type="status">
-            <targetdevicedid>(IoTdid)</targetdevicedid>
-            <targetstatus>off</targetstatus>
-        </action>
+        <conditions>
+            <condition type="time" id="1">
+                <targettimefrom>18:00</targettimefrom>
+                <targettimeto>18:10</targettimeto>
+            </condition>
+        </conditions>
+        <actions>
+            <action type="status" id="1">
+                <targetdevicename>台灯</targetdevicename>
+                <targetdevicedid>317934913</targetdevicedid>
+                <targetstatus>off</targetstatus>
+            </action>
+        </actions>
 	</event>
-    <event id="(did)" name="(name)">
+    <event id="002" name="sleep time">
 		<trigger type="time">
-            <targetdevicedid>(IoTdid)</targetdevicedid>
-            <targettime>18:00</targettime>
+            <targettimefrom>18:00</targettimefrom>
+            <targettimeto>18:10</targettimeto>
         </trigger>
-        </condition>
-        <action type="status">
-            <targetdevicedid>(IoTdid)</targetdevicedid>
-            <targetstatus>on</targetstatus>
-        </action>
+        <conditions/>
+        <actions>
+            <action type="status" id="1">
+                <targetdevicename>台灯</targetdevicename>
+                <targetdevicedid>317934913</targetdevicedid>
+                <targetstatus>on</targetstatus>
+            </action>
+        </actions>
 	</event>
 </events>
