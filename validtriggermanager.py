@@ -24,12 +24,14 @@ class ValidTriggerManager:
         self.decode_event_dict = self.s.enter(self.interval,1,self.decode_event_dict,argument=(self._total_event_dict,self._event_dict_lock,))
         self.s.run()
 
+
+
     def valid_event_processing(self, event_id, trigger:dict, condition_dict:dict, action_dict:dict):
         # 向事件线程管理表中添加正在执行的合法事件线程和事件id的对应信息
         thread_id = threading.current_thread().ident
         self.thread_manage_table[event_id] = thread_id
 
-
+        
 
 
 
@@ -47,7 +49,7 @@ class ValidTriggerManager:
 
 
                 valid_event_thread = Thread(target=self.valid_event_processing, args=(event_id,trigger,condition_dict,action_dict))
-                valid_event_thread.run()
+                valid_event_thread.start()
 
         self.s.enter(self.interval,1,self.decode_event_dict,argument=(total_event_dict,event_dict_lock,))
         self.s.run()

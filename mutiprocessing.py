@@ -20,12 +20,12 @@ class manager:
 
     def run_threads(self):
         device_listen_thread = Thread(target=self.device_listen, 
-                                      args=(self,self._focused_queue_list.devicestatus_queue))
+                                      args=(self._focused_queue_list.devicestatus_queue))
         time_listen_thread = Thread(target=self.time_listen, 
-                                    args=(self,self._focused_queue_list.time_queue))
+                                    args=(self._focused_queue_list.time_queue))
         
         valid_trigger_listen_thread = Thread(target=self.device_listen, 
-                                             args=(self,self._total_event_dict,
+                                             args=(self._total_event_dict,
                                                    self._focused_queue_list,self._event_dict_lock))
 
         device_listen_thread.run()
