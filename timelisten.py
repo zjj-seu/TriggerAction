@@ -22,8 +22,8 @@ class TimeCondition:
     def run(self):
         
         print("time condition checking")
-        print("wait for 3 sec to run")
-        time.sleep(3)
+        print("wait for 0.5 sec to run")
+        time.sleep(0.5)
         print("condition satisfied")
         self._semaphore_satisfied.release()
         self._semaphore_checked.release()

@@ -37,11 +37,11 @@ class miio_DeviceDataXmlReader(xml_reader.XmlReader):
         device_list = {}
         # 遍历XML文件
         for child in root:
-            print(str(child.tag)+"\t"+str(child.attrib))
+            # print(str(child.tag)+"\t"+str(child.attrib))
             did = child.attrib["id"]
             deviceInfo = {}
             for grandchild in child:
-                print(str(grandchild.tag)+"\t"+str(grandchild.attrib)+"\t"+str(grandchild.text))
+                # print(str(grandchild.tag)+"\t"+str(grandchild.attrib)+"\t"+str(grandchild.text))
                 deviceInfo[grandchild.tag] = grandchild.text
             device_list[did] = deviceInfo
 

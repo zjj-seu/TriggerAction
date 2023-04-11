@@ -9,7 +9,7 @@ class miio_DeviceDataXmlReader(xml_reader.XmlReader):
         if not self.check_file_exists():
             self.create_file_with_miio_device_root()
 
-        super().__init__(file_path)
+        super().__init__(file_path, "devices")
 
     def check_file_exists(self):
         """

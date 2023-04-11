@@ -36,25 +36,27 @@ class EventFetcher():
         {
         '001': {'id': '001', 'name': 'save energy', 'status': 'on', 
                 'eventdetails': {'trigger': {'type': 'status', 
+                                            'id': '001101',
                                             'targetdevicedid': '317934913', 
                                             'targetstatus': 'on', 
                                             'targetdevicename': '台灯'}, 
-                                'conditions': {'1': {'type': 'time', 
-                                                    'id': '1', 
+                                'conditions': {'001201': {'type': 'time', 
+                                                    'id': '001201', 
                                                     'targettimefrom': '18:00', 
                                                     'targettimeto': '18:10'}}, 
-                                'actions': {'1': {'type': 'status', 
-                                                'id': '1', 
+                                'actions': {'001301': {'type': 'status', 
+                                                'id': '001301', 
                                                 'targetdevicedid': '317934913', 
                                                 'targetstatus': 'off', 
                                                 'targetdevicename': '台灯'}}}}, 
         '002': {'id': '002', 'name': 'sleep time', 'status': 'on', 
                 'eventdetails': {'trigger': {'type': 'time', 
+                                            'id': '002101',
                                             'targettimefrom': '18:00', 
                                             'targettimeto': '18:10'}, 
                                 'conditions': {}, 
-                                'actions': {'1': {'type': 'status', 
-                                                'id': '1', 
+                                'actions': {'002301': {'type': 'status', 
+                                                'id': '002301', 
                                                 'targetdevicedid': '317934913', 
                                                 'targetstatus': 'on', 
                                                 'targetdevicename': '台灯'}}}}
@@ -79,8 +81,10 @@ class EventFetcher():
             for grandchild in child:
                 if grandchild.tag == "trigger":
                     trigger_type = grandchild.attrib["type"]
+                    trigger_id = grandchild.attrib["id"]
                     trigger_details_dict = dict()
                     trigger_details_dict["type"] = trigger_type
+                    trigger_details_dict["id"] = trigger_id
                     for key, value in eventraw_list[trigger_type].items():
                         trigger_details_dict[value] = grandchild.find(value).text
 
@@ -89,9 +93,10 @@ class EventFetcher():
                     conditions_dict = dict()
                     for grandgrandchild in grandchild:
                         condition_type = grandgrandchild.attrib["type"]
+                        condition_id = grandgrandchild.attrib["id"]
                         condition_details_dict = dict()
                         condition_details_dict["type"] = condition_type
-                        condition_details_dict["id"] = grandgrandchild.attrib["id"]
+                        condition_details_dict["id"] = condition_id
                         for key,value in eventraw_list[condition_type].items():
                             condition_details_dict[value] = grandgrandchild.find(value).text
                         
@@ -102,9 +107,10 @@ class EventFetcher():
                     actions_dict = dict()
                     for grandgrandchild in grandchild:
                         action_type = grandgrandchild.attrib["type"]
+                        action_id = grandgrandchild.attrib["id"]
                         action_details_dict = dict()
                         action_details_dict["type"] = action_type
-                        action_details_dict["id"] = grandgrandchild.attrib["id"]
+                        action_details_dict["id"] = action_id
                         for key,value in eventraw_list[action_type].items():
                             action_details_dict[value] = grandgrandchild.find(value).text
                         

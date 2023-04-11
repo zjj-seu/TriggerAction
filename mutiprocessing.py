@@ -5,42 +5,50 @@ from threading import Thread
 from threading import Lock
 
 from focusedqueuelist import FocusedQueueList
+from settings import Settings
 
-from devicelisten import DeviceListen
-from timelisten import TimeListen
+from device_check_sever import DeviceCheckServer
 from validtriggermanager import ValidTriggerManager
+
+from eventfetch import EventFetcher
+
 
 
 class manager:
     def __init__(self, total_event_dict:dict) -> None:
         self._total_event_dict = total_event_dict
-        self._focused_queue_list = FocusedQueueList()
+        self._valid_mess_queue = dict()
 
         self._event_dict_lock = Lock()
+        self._queue_dict_lock = Lock()
+
+
 
     def run_threads(self):
-        device_listen_thread = Thread(target=self.device_listen, 
-                                      args=(self._focused_queue_list.devicestatus_queue))
-        time_listen_thread = Thread(target=self.time_listen, 
-                                    args=(self._focused_queue_list.time_queue))
         
-        valid_trigger_listen_thread = Thread(target=self.device_listen, 
-                                             args=(self._total_event_dict,
-                                                   self._focused_queue_list,self._event_dict_lock))
+        valid_trigger_listen_thread = Thread(target=self.valid_trigger_manager, 
+                                             args=())
 
-        device_listen_thread.run()
-        valid_trigger_listen_thread.run()
+        device_check_thread = Thread(target=self.device_listen, args=())
 
-    def time_listen(self, time_queue):
-        time_listener =  TimeListen(time_queue)
-        time_listener.run()
+        valid_trigger_listen_thread.start()
+        device_check_thread.start()
 
-    def device_listen(self, devicestatus_queue):
-        device_listener = DeviceListen(devicestatus_queue)
-        device_listener.run()
 
-    def valid_trigger_manager(self, total_event_dict:dict, focused_queue_list, event_dict_lock):
-        valid_trigger_manager = ValidTriggerManager(total_event_dict, focused_queue_list, event_dict_lock)
+    def device_listen(self):
+        device_check = DeviceCheckServer(self._valid_mess_queue,self._queue_dict_lock,
+                                         self._total_event_dict,self._event_dict_lock)
+        device_check.run()
+
+    def valid_trigger_manager(self):
+        valid_trigger_manager = ValidTriggerManager(self._total_event_dict, self._valid_mess_queue, 
+                                                    self._event_dict_lock, self._queue_dict_lock)
         valid_trigger_manager.run()
+
+if __name__ == "__main__":
+    eventfecher = EventFetcher(Settings.event_path,Settings.eventraw_path)
+    total_event = eventfecher.get_event_list()
+    m = manager(total_event)
+    m.run_threads()
 
     
