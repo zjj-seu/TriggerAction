@@ -70,7 +70,7 @@ def test():
     connector.connect_to_micloud()
     manager = MiDeviceManager(connector)
     my_devicelist = manager.get_processed_devicelist()
-    deviceUpdater = miio_DeviceDataUpdater(Settings.devicefile_path,my_devicelist)
+    deviceUpdater = miio_DeviceDataUpdater(Settings.mihome_devicefile_path,my_devicelist)
     deviceUpdater.update_data()
 
 

@@ -9,12 +9,12 @@
 		<devtype>(device type)</devtype>
 		<class>(class type)</class>
 	</device>
-	<device id="broadlink_001">
-		<did>broadlink_001</did>
+	<device id="127049371880428">
+		<did>127049371880428</did>
 		<name>博联智能插座</name>
 		<ip>192.168.3.70</ip>
 		<port>80</port>
-		<mac>b'\xec\x0b\xae\xfc\x8c\x73'</mac>
+		<mac>127049371880428</mac>
 		<devtype>30056</devtype>
 		<class>broadlink.switch.sp4</class>
 	</device>

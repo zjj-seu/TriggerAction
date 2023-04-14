@@ -10,11 +10,12 @@ from midevicemanager import MiDeviceManager
 from myYeelight import MyYeelight
 
 from threading import Thread
+from device_data_xmlreader import AllBrandDeviceDataReader
 
 
 
 class DeviceCheckServer:
-    def __init__(self, valid_queue_dict:dict, queue_dict_lock:Lock, total_event_dict:dict, event_dict_lock:Lock) -> None:
+    def __init__(self, valid_queue_dict:dict, queue_dict_lock:Lock, total_event_dict:dict, event_dict_lock:Lock, xmlreader:AllBrandDeviceDataReader) -> None:
         self.valid_queue_dict = valid_queue_dict
         self.queue_dict_lock = queue_dict_lock
         self.lock_for_event_dict = event_dict_lock
@@ -31,7 +32,8 @@ class DeviceCheckServer:
         self.update_mess_queue_interval = Settings.device_server_queue_check_interval_sec
         self.local_queue_dict = dict()
         
-
+        # TODO 写一个整合所有品牌IoT设备的类，可以读取本地xml文件，加个锁，用另外的类不时更新
+        self.xml_reader = xmlreader
 
     def check_current_event(self):
         with self.lock_for_local_queue_list:
@@ -47,7 +49,8 @@ class DeviceCheckServer:
     def server(self):
         print(f"getting online device list ")
 
-        my_devicelist = self.manager.get_processed_devicelist()
+
+        local_device_list = self.xml_reader.get_local_device_list()
 
         """
         {'317934913_cn': {'name': '台灯', 'did': '317934913', 'ip': '192.168.3.54', 'token': '9490458620e6604d712ccad862bc32b6'}, 
@@ -61,8 +64,16 @@ class DeviceCheckServer:
 
                 did = queue.get()
                 queue.queue.clear()
-                token = my_devicelist[did + "_cn"]["token"]
-                ip = my_devicelist[did + "_cn"]["ip"]
+
+                device_details = local_device_list[did]
+                deviceclass:str = device_details["class"]
+
+                if deviceclass.startswith("miio"):
+                    pass
+                elif deviceclass.startswith("broadlink"):
+                    pass
+
+
 
                 print(f"checking did:{did} status")
 

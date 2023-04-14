@@ -1,7 +1,7 @@
 import sched
 import time
 
-
+# 非主要文件
 # 一种实现周期性检查condition的方案
 # 此处trigger与condition的名词定义模糊
 

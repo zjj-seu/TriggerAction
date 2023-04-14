@@ -10,7 +10,6 @@ from timelisten import TimeCondition,TimeTrigger
 from queue import Queue
 from restart_thread import MyThread
 
-from focusedqueuelist import FocusedQueueList
 
 class AbstractEventRun(ABC):
     def __init__(self, trigger:dict, condition_dict:dict, action_dict:dict, valid_mess_queue:dict, queue_dict_lock:Lock) -> None:
@@ -120,8 +119,7 @@ class AbstractEventRun(ABC):
             self.condition_satisfied_semaphore.acquire(self.condition_count)
 
             for thread in action_thread_list:
-                print(f"=======================\n" + 
-                        "action  is running\n" )
+                print(f"=================== action  is running =====================" )
                 thread.start()
         
 
@@ -153,7 +151,4 @@ if __name__ == "__main__":
     
     print("run")
     
-    mess_queue = FocusedQueueList()
-    a = AbstractEventRun(trigger, condition_dict, action_dict, mess_queue)
-    a.run()
 

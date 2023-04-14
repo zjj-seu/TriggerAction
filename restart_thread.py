@@ -1,3 +1,5 @@
+# 适用于需要反复启动线程检查某个状态的事件，由于python线程不能多次启动
+
 from threading import Thread
 
 

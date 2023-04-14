@@ -4,13 +4,13 @@
 from threading import Thread
 from threading import Lock
 
-from focusedqueuelist import FocusedQueueList
 from settings import Settings
 
 from device_check_sever import DeviceCheckServer
 from validtriggermanager import ValidTriggerManager
 
 from eventfetch import EventFetcher
+from device_data_xmlreader import AllBrandDeviceDataReader
 
 
 
@@ -21,6 +21,9 @@ class manager:
 
         self._event_dict_lock = Lock()
         self._queue_dict_lock = Lock()
+        self._local_xml_lock = Lock()
+
+        self._xmlreader = AllBrandDeviceDataReader(self._local_xml_lock)
 
 
 
@@ -37,7 +40,7 @@ class manager:
 
     def device_listen(self):
         device_check = DeviceCheckServer(self._valid_mess_queue,self._queue_dict_lock,
-                                         self._total_event_dict,self._event_dict_lock)
+                                         self._total_event_dict,self._event_dict_lock,self._xmlreader)
         device_check.run()
 
     def valid_trigger_manager(self):

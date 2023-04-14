@@ -2,7 +2,8 @@ class Settings:
     username = "18305258602"
     password = "zjj139736672"
 
-    devicefile_path = "data_files\device_data.xml"
+    mihome_devicefile_path = "data_files\device_data_mihome.xml"
+    broadlink_devicefile_path = "data_files\device_data_broadlink.xml"
     event_path = "data_files\event.xml"
     eventraw_path = "data_files\eventraw.xml"
 

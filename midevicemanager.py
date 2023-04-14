@@ -23,7 +23,10 @@ class DeviceInfoProcessor:
                     attr = getattr(miclouddeviceInfo, key)
                     if attr == "":
                         attr = None
-                    mydeviceInfo[key] = attr
+                    if key == "did":
+                        mydeviceInfo[key] = attr + "_cn"
+                    else:
+                        mydeviceInfo[key] = attr
                     print(f"processed attr named {key},value:{mydeviceInfo[key]}")
                 else:
                     print(f"can't find the attr named {key}")
