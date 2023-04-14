@@ -36,6 +36,7 @@ class DeviceCheckServer:
     def check_current_event(self):
         with self.lock_for_local_queue_list:
             with self.lock_for_event_dict:
+                self.local_queue_dict.clear()
                 for id, queue in self.valid_queue_dict.items():
                     if id.startswith("status"):
                         self.local_queue_dict[id] = queue
@@ -48,7 +49,6 @@ class DeviceCheckServer:
 
         my_devicelist = self.manager.get_processed_devicelist()
 
-        
         """
         {'317934913_cn': {'name': '台灯', 'did': '317934913', 'ip': '192.168.3.54', 'token': '9490458620e6604d712ccad862bc32b6'}, 
         '108412119_cn': {'name': '小爱音箱 万能遥控版', 'did': '108412119', 'ip': '192.168.3.64', 'token': '704e665a31787076614f354950436c6f'}, 
@@ -70,11 +70,8 @@ class DeviceCheckServer:
                 queue.put(yeelight.get_power_status())
                 queue.put(yeelight.get_power_status())
 
-
-
         self.s.enter(Settings.device_data_check_interval_sec,1,self.server,())
         self.s.run()
-
 
     def run(self):
         print("initiating device check server!!!")

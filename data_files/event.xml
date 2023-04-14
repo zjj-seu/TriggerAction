@@ -4,7 +4,7 @@
 		<trigger type="status" id="001101">
             <targetdevicename>台灯</targetdevicename>
             <targetdevicedid>317934913</targetdevicedid>
-            <targetstatus>on</targetstatus>
+            <targetstatus>off</targetstatus>
         </trigger>
         <conditions>
             <condition type="time" id="001201">
@@ -16,7 +16,7 @@
             <action type="status" id="001301">
                 <targetdevicename>台灯</targetdevicename>
                 <targetdevicedid>317934913</targetdevicedid>
-                <targetstatus>off</targetstatus>
+                <targetstatus>on</targetstatus>
             </action>
         </actions>
 	</event>

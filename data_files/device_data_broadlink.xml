@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<devices>
+	<device id="(did)">
+		<did>(did)</did>
+		<name>(name)</name>
+		<ip>(lan ipv4)</ip>
+		<port>(port)</port>
+		<mac>(device mac)</mac>
+		<devtype>(device type)</devtype>
+		<class>(class type)</class>
+	</device>
+	<device id="broadlink_001">
+		<did>broadlink_001</did>
+		<name>博联智能插座</name>
+		<ip>192.168.3.70</ip>
+		<port>80</port>
+		<mac>b'\xec\x0b\xae\xfc\x8c\x73'</mac>
+		<devtype>30056</devtype>
+		<class>broadlink.switch.sp4</class>
+	</device>
+</devices>
