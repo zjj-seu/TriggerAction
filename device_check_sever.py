@@ -11,6 +11,8 @@ from myYeelight import MyYeelight
 
 from threading import Thread
 from device_data_xmlreader import AllBrandDeviceDataReader
+from mymihome import MyMiHome
+from devicecontroller import DeviceController
 
 
 
@@ -67,19 +69,18 @@ class DeviceCheckServer:
 
                 device_details = local_device_list[did]
                 deviceclass:str = device_details["class"]
+                
+                device_controller = DeviceController()
 
                 if deviceclass.startswith("miio"):
-                    pass
+                    device_controller = MyMiHome(devicedetails=device_details)
+                    
                 elif deviceclass.startswith("broadlink"):
                     pass
-
-
-
+                    
                 print(f"checking did:{did} status")
-
-                yeelight = MyYeelight(ip, token)
-                queue.put(yeelight.get_power_status())
-                queue.put(yeelight.get_power_status())
+                queue.put(device_controller.get_status())
+                queue.put(device_controller.get_status())
 
         self.s.enter(Settings.device_data_check_interval_sec,1,self.server,())
         self.s.run()
