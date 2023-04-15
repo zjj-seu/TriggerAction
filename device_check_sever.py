@@ -1,5 +1,5 @@
 # 用于高频查询设备状态
-# TODO 多线程服务器查询有问题
+# TODO 多线程服务器查询有问题,使用了有等待限制的队列读取方法，但是这样会增加时间，建议改多线程暴力并行
 from queue import Queue
 from settings import Settings
 from threading import Lock
@@ -30,13 +30,11 @@ class DeviceCheckServer:
         self.manager = MiDeviceManager(self.connector)
 
         self.s = sched.scheduler(time.time,time.sleep)
-
         self.update_mess_queue = sched.scheduler(time.time,time.sleep)
         self.lock_for_local_queue_list = Lock()
         self.update_mess_queue_interval = Settings.device_server_queue_check_interval_sec
         self.local_queue_dict = dict()
         
-        # TODO 写一个整合所有品牌IoT设备的类，可以读取本地xml文件，加个锁，用另外的类不时更新
         self.xml_reader = xmlreader
 
     def check_current_event(self):
@@ -53,9 +51,7 @@ class DeviceCheckServer:
     def server(self):
         print(f"[DeviceCheckServer] getting online device list ")
 
-
         local_device_list = self.xml_reader.get_local_device_list()
-
 
         """
         {'317934913_cn': {'name': '台灯', 'did': '317934913', 'ip': '192.168.3.54', 'token': '9490458620e6604d712ccad862bc32b6'}, 
@@ -84,7 +80,6 @@ class DeviceCheckServer:
                     print(f"[DeviceCheckServer] checking broadlink did:{did} status")
                     device_controller = MyBroadLink(devicedetails=device_details)
                     
-                
                 queue.put(device_controller.get_status())
                 queue.put(device_controller.get_status())
             
@@ -98,6 +93,4 @@ class DeviceCheckServer:
 
         Thread(target=self.check_current_event,args=()).start()
         Thread(target=self.server,args=()).start()
-        
-
-       
+         
