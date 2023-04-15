@@ -16,6 +16,14 @@ class MyMiHome(DeviceController):
             yeelight = MyYeelight(ip,token)
             return yeelight.get_power_status()
         
+    def status_action(self, cmd:str):
+        device_class:str = self.device_details["class"]
+        if device_class.startswith("miio.integrations.yeelight.light.yeelight.Yeelight"):
+            ip = self.device_details["ip"]
+            token = self.device_details["token"]
+            yeelight = MyYeelight(ip,token)
+            yeelight.status_command(cmd)
+        
 
     
 class MyYeelight:

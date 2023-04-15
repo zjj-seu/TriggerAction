@@ -65,7 +65,8 @@ class AllBrandDeviceDataReader:
                     broadlinkreader = broadlink_DeviceDataXmlReader(path)
                     devices = broadlinkreader.get_device_list()
                     devicelist.update(devices)
-        
+                    
+        return devicelist
         
 
     

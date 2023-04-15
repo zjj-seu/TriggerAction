@@ -49,10 +49,11 @@ class DeviceCheckServer:
         self.update_mess_queue.run()
 
     def server(self):
-        print(f"getting online device list ")
+        print(f"[DeviceCheckServer] getting online device list ")
 
 
         local_device_list = self.xml_reader.get_local_device_list()
+
 
         """
         {'317934913_cn': {'name': '台灯', 'did': '317934913', 'ip': '192.168.3.54', 'token': '9490458620e6604d712ccad862bc32b6'}, 
@@ -60,9 +61,9 @@ class DeviceCheckServer:
         'ir.1543249323641991168_cn': {'name': '空调', 'did': 'ir.1543249323641991168', 'ip': None, 'token': None}}
         """
         with self.lock_for_local_queue_list:
-            print(f"checking device status")
+            print(f"[DeviceCheckServer] checking device status")
             for id, queue in self.local_queue_dict.items():
-                print(f"id:{id}queue mess getting")
+                print(f"[DeviceCheckServer] id:{id}queue mess getting")
 
                 did = queue.get()
                 queue.queue.clear()
@@ -70,7 +71,7 @@ class DeviceCheckServer:
                 device_details = local_device_list[did]
                 deviceclass:str = device_details["class"]
                 
-                device_controller = DeviceController()
+                device_controller:DeviceController = None
 
                 if deviceclass.startswith("miio"):
                     device_controller = MyMiHome(devicedetails=device_details)
@@ -78,15 +79,17 @@ class DeviceCheckServer:
                 elif deviceclass.startswith("broadlink"):
                     pass
                     
-                print(f"checking did:{did} status")
+                print(f"[DeviceCheckServer] checking did:{did} status")
                 queue.put(device_controller.get_status())
                 queue.put(device_controller.get_status())
+            
+        print("[DeviceCheckServer] plan next check")
 
         self.s.enter(Settings.device_data_check_interval_sec,1,self.server,())
         self.s.run()
 
     def run(self):
-        print("initiating device check server!!!")
+        print("[DeviceCheckServer] initiating device check server!!!")
 
         Thread(target=self.check_current_event,args=()).start()
         Thread(target=self.server,args=()).start()

@@ -45,7 +45,7 @@ class manager:
 
     def valid_trigger_manager(self):
         valid_trigger_manager = ValidTriggerManager(self._total_event_dict, self._valid_mess_queue, 
-                                                    self._event_dict_lock, self._queue_dict_lock)
+                                                    self._event_dict_lock, self._queue_dict_lock,self._xmlreader)
         valid_trigger_manager.run()
 
 if __name__ == "__main__":

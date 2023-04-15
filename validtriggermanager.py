@@ -9,13 +9,15 @@ import threading
 from threading import Thread
 
 from abstract_event_run import AbstractEventRun
+from device_data_xmlreader import AllBrandDeviceDataReader
 
 class ValidTriggerManager:
-    def __init__(self, total_event_dict:dict, valid_queue_list:dict, event_dict_lock:Lock, queue_dict_lock:Lock) -> None:
+    def __init__(self, total_event_dict:dict, valid_queue_list:dict, event_dict_lock:Lock, queue_dict_lock:Lock, xmlreader:AllBrandDeviceDataReader) -> None:
         self._total_event_dict = total_event_dict
         self._valid_mess_queue = valid_queue_list
         self._event_dict_lock = event_dict_lock
         self._queue_dict_lock = queue_dict_lock
+        self.xmlreader = xmlreader
 
         self.thread_manage_table = dict()
 
@@ -30,7 +32,7 @@ class ValidTriggerManager:
         thread_id = threading.current_thread().ident
         self.thread_manage_table[event_id] = thread_id
 
-        event = AbstractEventRun(trigger, condition_dict, action_dict, self._valid_mess_queue, self._queue_dict_lock)
+        event = AbstractEventRun(trigger, condition_dict, action_dict, self._valid_mess_queue, self._queue_dict_lock, self.xmlreader)
         event.run()
 
     def decode_event_dict(self):

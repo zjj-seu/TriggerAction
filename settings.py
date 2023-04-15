@@ -8,8 +8,8 @@ class Settings:
     eventraw_path = "data_files\eventraw.xml"
 
     event_decode_interval_sec = 3
-    trigger_listening_interval_sec = 1
-    device_data_check_interval_sec = 1
+    trigger_listening_interval_sec = 0.5
+    device_data_check_interval_sec = 0.5
     device_server_queue_check_interval_sec = 5
 
     broadlink_ssid = "18305258602"

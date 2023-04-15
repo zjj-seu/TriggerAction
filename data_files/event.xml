@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <events>
-	<event id="001" name="save energy" status="off">
+	<event id="001" name="save energy" status="on">
 		<trigger type="status" id="001101">
             <targetdevicename>台灯</targetdevicename>
-            <targetdevicedid>317934913</targetdevicedid>
-            <targetstatus>off</targetstatus>
+            <targetdevicedid>317934913_cn</targetdevicedid>
+            <targetstatus>on</targetstatus>
         </trigger>
         <conditions>
             <condition type="time" id="001201">
@@ -15,15 +15,15 @@
         <actions>
             <action type="status" id="001301">
                 <targetdevicename>台灯</targetdevicename>
-                <targetdevicedid>317934913</targetdevicedid>
-                <targetstatus>on</targetstatus>
+                <targetdevicedid>317934913_cn</targetdevicedid>
+                <targetstatus>off</targetstatus>
             </action>
         </actions>
 	</event>
-    <event id="002" name="save energy" status="on">
+    <event id="002" name="save energy" status="off">
 		<trigger type="status" id="002101">
             <targetdevicename>台灯</targetdevicename>
-            <targetdevicedid>317934913</targetdevicedid>
+            <targetdevicedid>317934913_cn</targetdevicedid>
             <targetstatus>off</targetstatus>
         </trigger>
         <conditions>

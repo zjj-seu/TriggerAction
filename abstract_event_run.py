@@ -9,16 +9,18 @@ from devicelisten import DeviceTrigger,DeviceCondition,DeviceAction
 from timelisten import TimeCondition,TimeTrigger
 from queue import Queue
 from restart_thread import MyThread
+from device_data_xmlreader import AllBrandDeviceDataReader
 
 
 class AbstractEventRun(ABC):
-    def __init__(self, trigger:dict, condition_dict:dict, action_dict:dict, valid_mess_queue:dict, queue_dict_lock:Lock) -> None:
+    def __init__(self, trigger:dict, condition_dict:dict, action_dict:dict, valid_mess_queue:dict, queue_dict_lock:Lock, xmlreader:AllBrandDeviceDataReader) -> None:
         super().__init__()
         self.trigger = trigger
         self.condition_dict = condition_dict
         self.action_dict = action_dict
         self.valid_mess_queue = valid_mess_queue
         self.queue_dict_lock = queue_dict_lock
+        self.xmlreader = xmlreader
 
         self.condition_count = len(self.condition_dict)
         self.action_count = len(self.action_dict)
@@ -90,13 +92,13 @@ class AbstractEventRun(ABC):
                 thread.start()
 
             self.condition_checked_semaphore.acquire(self.condition_count)
-            time.sleep(1)
+
             
             satified_count = self.condition_satisfied_semaphore._value
             print(f"dictlen:{self.condition_count}")
             print(f"checked num:{self.condition_checked_semaphore._value}")
             print(f"satisfied num:{self.condition_satisfied_semaphore._value}")
-            if satified_count != self:
+            if satified_count != self.condition_count:
                 self.condition_satisfied_semaphore.acquire(satified_count)
             
             print("=========================================")
@@ -111,7 +113,7 @@ class AbstractEventRun(ABC):
 
         for id, action_details in self.action_dict.items():
             if action_details["type"] == "status":
-                action_one = DeviceAction(action_details)
+                action_one = DeviceAction(action_details, self.xmlreader)
                 action_thread = MyThread(target=action_one.run)
                 action_thread_list.append(action_thread)
 
