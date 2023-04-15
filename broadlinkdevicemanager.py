@@ -54,7 +54,7 @@ class DeviceInfoProcessor:
             deviceinfo["did"] = did
             deviceinfo["mac"] = did
             deviceinfo["ip"] = device.host[0]
-            deviceinfo["port"] = device.host[1]
+            deviceinfo["port"] = str(device.host[1])
             deviceinfo["name"] = device.name
             deviceinfo["devtype"] = str(device.devtype)
             deviceinfo["class"] = device.__class__.__module__ + "." + device.__class__.__name__

@@ -1,5 +1,5 @@
 from devicecontroller import DeviceController
-
+from abc import ABC, abstractclassmethod
 from miio.integrations.yeelight.light.yeelight import Yeelight,YeelightStatus
 
 
@@ -7,29 +7,36 @@ from miio.integrations.yeelight.light.yeelight import Yeelight,YeelightStatus
 class MyMiHome(DeviceController):
     def __init__(self, devicedetails:dict) -> None:
         self.device_details = devicedetails
-    
-    def get_status(self):
-        device_class:str = self.device_details["class"]
-        if device_class.startswith("miio.integrations.yeelight.light.yeelight.Yeelight"):
+        self.device_class:str = self.device_details["class"]
+        self.MiHomeDevice:MyMiHomeDevice = None
+        
+        if self.device_class.startswith("miio.integrations.yeelight.light.yeelight.Yeelight"):
             ip = self.device_details["ip"]
             token = self.device_details["token"]
-            yeelight = MyYeelight(ip,token)
-            return yeelight.get_power_status()
+            self.MiHomeDevice = MyYeelight(ip,token)
+        
+    def get_status(self):
+        return self.MiHomeDevice.get_power_status()
         
     def status_action(self, cmd:str):
-        device_class:str = self.device_details["class"]
-        if device_class.startswith("miio.integrations.yeelight.light.yeelight.Yeelight"):
-            ip = self.device_details["ip"]
-            token = self.device_details["token"]
-            yeelight = MyYeelight(ip,token)
-            yeelight.status_command(cmd)
+        self.MiHomeDevice.status_command(cmd)
         
-
-    
-class MyYeelight:
+class MyMiHomeDevice(ABC):
     def __init__(self, ip , token) -> None:
         self._ip = ip
         self._token = token
+    
+    @abstractclassmethod
+    def get_power_status(self):
+        print("status_check_not_impl")
+    
+    @abstractclassmethod
+    def status_command(self, cmd:str):
+        print("status_comand_not_impl")
+    
+class MyYeelight(MyMiHomeDevice):
+    def __init__(self, ip, token) -> None:
+        super().__init__(ip, token)
         self.yeelight = Yeelight(ip=self._ip, token=self._token)
 
     def get_power_status(self):

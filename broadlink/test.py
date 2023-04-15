@@ -12,6 +12,8 @@ device = broadlink.switch.sp4(host=('192.168.3.70', 80), mac=b'\xec\x0b\xae\xfc\
 # 连接到设备，并进行身份验证
 device.auth()
 
+print(device.ke)
+
 # 打开SP4智能插座，并保持开启5秒钟
 device.set_power(False)
 time.sleep(5)

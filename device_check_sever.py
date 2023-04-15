@@ -1,4 +1,5 @@
 # 用于高频查询设备状态
+# TODO 多线程服务器查询有问题
 from queue import Queue
 from settings import Settings
 from threading import Lock
@@ -7,11 +8,12 @@ import sched
 
 from micloudconnector import MiCloudConnector
 from midevicemanager import MiDeviceManager
-from myYeelight import MyYeelight
+
 
 from threading import Thread
 from device_data_xmlreader import AllBrandDeviceDataReader
 from mymihome import MyMiHome
+from mybroadlink import MyBroadLink
 from devicecontroller import DeviceController
 
 
@@ -65,21 +67,24 @@ class DeviceCheckServer:
             for id, queue in self.local_queue_dict.items():
                 print(f"[DeviceCheckServer] id:{id}queue mess getting")
 
-                did = queue.get()
+                try:
+                    did = queue.get(timeout= 0.01)
+                except:
+                    continue
+                
                 queue.queue.clear()
-
                 device_details = local_device_list[did]
                 deviceclass:str = device_details["class"]
-                
                 device_controller:DeviceController = None
 
                 if deviceclass.startswith("miio"):
+                    print(f"[DeviceCheckServer] checking mihome did:{did} status")
                     device_controller = MyMiHome(devicedetails=device_details)
-                    
                 elif deviceclass.startswith("broadlink"):
-                    pass
+                    print(f"[DeviceCheckServer] checking broadlink did:{did} status")
+                    device_controller = MyBroadLink(devicedetails=device_details)
                     
-                print(f"[DeviceCheckServer] checking did:{did} status")
+                
                 queue.put(device_controller.get_status())
                 queue.put(device_controller.get_status())
             

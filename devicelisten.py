@@ -5,9 +5,9 @@ from queue import Queue
 from threading import Semaphore
 from settings import Settings
 from device_data_xmlreader import miio_DeviceDataXmlReader
-from myYeelight import MyYeelight
 from device_data_xmlreader import AllBrandDeviceDataReader
 from mymihome import MyMiHome
+from mybroadlink import MyBroadLink
 from devicecontroller import DeviceController
 
 import time
@@ -61,16 +61,40 @@ class DeviceCondition:
         self._semaphore_satisfied = semaphore_satisfied
         self._semaphore_checked = semaphore_checked
         self._condition = condition
+        
+        self.device_id = condition["targetdevicedid"]
+        self.target_status = condition["targetstatus"]
+        self.current_status = None
 
     def run(self):
-        # TODO
-        pass
+        print("[DeviceCondition] condition checking activated!!! ")
+        
+        print(f"[DeviceCondition] trying to get status whose did:{self.device_id}")
+        self._devicestatus_queue.put(self.device_id)
+
+
+        while self._devicestatus_queue.qsize() < 2:
+            pass
+            
+        print("[DeviceCondition] return to condtion checker")
+        
+        self.current_status = self._devicestatus_queue.get()
+        self._devicestatus_queue.queue.clear()
+
+        print(f"[DeviceCondition] got needed status did:{self.device_id}, current_status:{self.current_status}, target_status:{self.target_status}")
+
+
+        if self.current_status == self.target_status:
+            self._semaphore_satisfied.release()
+        
+        self._semaphore_checked.release()
 
 class DeviceAction:
     def __init__(self, action:dict, xmlreader:AllBrandDeviceDataReader) -> None:
         self.action = action
-                
         self.xmlreader = xmlreader
+        
+        self.device_controller:DeviceController = None
     
     def run(self):
         id = self.action["id"]
@@ -85,6 +109,8 @@ class DeviceAction:
         cmd = self.action["targetstatus"]
         if device_class.startswith("miio"):
             device_controller = MyMiHome(target_device_details)
+        elif device_class.startswith("broadlink"):
+            device_controller = MyBroadLink(target_device_details)
         
         device_controller.status_action(cmd)
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <events>
-	<event id="001" name="save energy" status="on">
+	<event id="001" name="save energy" status="off">
 		<trigger type="status" id="001101">
             <targetdevicename>台灯</targetdevicename>
             <targetdevicedid>317934913_cn</targetdevicedid>
@@ -20,7 +20,7 @@
             </action>
         </actions>
 	</event>
-    <event id="002" name="save energy" status="off">
+    <event id="002" name="save energy" status="on">
 		<trigger type="status" id="002101">
             <targetdevicename>台灯</targetdevicename>
             <targetdevicedid>317934913_cn</targetdevicedid>
