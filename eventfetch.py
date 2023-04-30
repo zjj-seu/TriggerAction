@@ -1,16 +1,27 @@
-from threading import Lock
+from threading import Lock,Thread
+from sched import scheduler
+import time
 
 from xml_reader import XmlReader
 from settings import Settings
 from xml_updater import xmlUpdater
 
 class EventDictAccess:
-    def __init__(self, eventlist:dict) -> None:
-        self.eventlist = eventlist
+    def __init__(self, EventAccess:"EventAccessController") -> None:
+        self.eventlist = EventAccess.get_event_list()
+        self.eventaccess = EventAccess
         self.lock = Lock()
         
-    
-
+        self.schedulerforupdate = scheduler(time.time, time.sleep)
+        Thread(target=self.updateself).start()
+        
+    def updateself(self):
+        with self.lock:
+            self.eventlist = self.eventaccess.get_event_list()
+        
+        
+        self.schedulerforupdate.enter(Settings.event_data_update_interval_sec,1,self.updateself)
+        self.schedulerforupdate.run()
 
 class EventAccessController:
     def __init__(self, eventfilepath:str, event_raw_path:str, event_class_raw_path:str) -> None:
@@ -94,11 +105,8 @@ class EventAccessController:
                 
         
         with self.lock:
-            xmlupdater.add_to_tree_and_save(new_branch)
+            xmlupdater.insert_new_or_update_data(new_branch)
             xmlupdater.save_to_files()
-        
-        
-                    
         
         pass
 

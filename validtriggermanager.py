@@ -50,6 +50,7 @@ class ValidTriggerManager:
 
                 valid_event_thread = Thread(target=self.valid_event_processing, args=(event_id,trigger,condition_dict,action_dict,))
                 valid_event_thread.start()
+            print(f"[ValidTriggerManager]thread table{self.thread_manage_table}")
 
         self.s.enter(self.interval,1,self.decode_event_dict,())
         self.s.run()

@@ -17,6 +17,7 @@ class Settings:
     trigger_listening_interval_sec = 0.01
     device_data_check_interval_sec = 0.01
     device_server_queue_check_interval_sec = 5
+    event_data_update_interval_sec = 1
 
     broadlink_ssid = "18305258602"
     broadlink_pass = "zjj139736672"

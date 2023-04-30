@@ -7,6 +7,15 @@ class XmlReader:
         self.file_path = file_path
         if not os.path.exists(self.file_path):
             self.create_file_with_given_root()
+            
+        file_size = os.stat(file_path).st_size
+        if file_size == 0:
+            # 创建根节点为 events 的 XML 文件
+            root = ET.Element(default_root_name)
+            tree = ET.ElementTree(root)
+            # 保存文件
+            tree.write(file_path)
+            print("Empty XML file detected. Added root tag 'events' and saved to file.")
 
         self.root = None
         self.parse_xml()

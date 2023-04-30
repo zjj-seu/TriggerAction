@@ -47,10 +47,8 @@ class broadlink_DeviceDataXmlReader(XmlReader):
         return device_list
 
 class AllBrandDeviceDataReader:
-    def __init__(self) -> None:
-        self.filepathlist = dict()
-        self.filepathlist["mihome"] = Settings.mihome_devicefile_path
-        self.filepathlist["broadlink"] = Settings.broadlink_devicefile_path
+    def __init__(self,filepathlist:dict) -> None:
+        self.filepathlist = filepathlist
         self.lockforfiles = Lock()
 
     def get_local_device_list(self):

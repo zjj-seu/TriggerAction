@@ -88,7 +88,7 @@ class DeviceCheckServer:
                     
         
         
-        print("[DeviceCheckServer.thread_manager] thread management performed one times\n" +"thread table:\n")
+        print("[DeviceCheckServer.thread_manager] thread management performed one times\"thread table:\n")
         print(self.thread_table)
         
         self.s.enter(Settings.device_server_queue_check_interval_sec,1,self.thread_manager,())
