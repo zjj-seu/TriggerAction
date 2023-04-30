@@ -1,6 +1,7 @@
-from devicecontroller import DeviceController
 from abc import ABC, abstractclassmethod
 from miio.integrations.yeelight.light.yeelight import Yeelight,YeelightStatus
+
+from devicecontroller import DeviceController
 
 
 

@@ -2,24 +2,25 @@ from abc import ABC, abstractmethod
 from threading import Lock
 from threading import Thread,Event
 import threading
-import time 
-import sched
+from queue import Queue
 
 from devicelisten import DeviceTrigger,DeviceCondition,DeviceAction
 from timelisten import TimeCondition,TimeTrigger
-from queue import Queue
+
 from restart_thread import MyThread
 from device_data_xmlreader import AllBrandDeviceDataReader
+from contactqueue import ContactQueue
 
 
 class AbstractEventRun(ABC):
-    def __init__(self, trigger:dict, condition_dict:dict, action_dict:dict, valid_mess_queue:dict, queue_dict_lock:Lock, xmlreader:AllBrandDeviceDataReader) -> None:
+    def __init__(self, trigger:dict, condition_dict:dict, action_dict:dict, contact_queue:ContactQueue, xmlreader:AllBrandDeviceDataReader) -> None:
         super().__init__()
         self.trigger = trigger
         self.condition_dict = condition_dict
         self.action_dict = action_dict
-        self.valid_mess_queue = valid_mess_queue
-        self.queue_dict_lock = queue_dict_lock
+        
+        self.contact_queue = contact_queue
+        
         self.xmlreader = xmlreader
 
         self.condition_count = len(self.condition_dict)
@@ -32,13 +33,13 @@ class AbstractEventRun(ABC):
 
     def trigger_decode(self):    
         id = self.trigger["id"]
-        print("id:{id} trigger_decode running!")
+        print(f"id:{id} trigger_decode running!")
 
         trigger_type = self.trigger["type"]
         if trigger_type == "status":
             mess_queue = Queue()
-            with self.queue_dict_lock:
-                self.valid_mess_queue["status" + self.trigger["id"]] = mess_queue
+            with self.contact_queue.lock:
+                self.contact_queue.queue["status" + self.trigger["id"]] = mess_queue
             
             device_listenner = DeviceTrigger(mess_queue,
                                              self.trigger_raised_semaphore,
@@ -46,8 +47,8 @@ class AbstractEventRun(ABC):
             Thread(target=device_listenner.run).start()
         elif trigger_type == "time":
             mess_queue = Queue()
-            with self.queue_dict_lock:
-                self.valid_mess_queue["time" + self.trigger["id"]] = mess_queue
+            with self.contact_queue.lock:
+                self.contact_queue.queue["time" + self.trigger["id"]] = mess_queue
 
             time_listenner = TimeTrigger(mess_queue,
                                          self.trigger_raised_semaphore,
@@ -60,12 +61,12 @@ class AbstractEventRun(ABC):
 
         for id, conditon_details in self.condition_dict.items():
             id = conditon_details["id"]
-            print("id:{id} condition_decode running!")
+            print(f"id:{id} condition_decode running!")
 
             if conditon_details["type"] == "status":
                 mess_queue = Queue()
-                with self.queue_dict_lock:
-                    self.valid_mess_queue["status" + conditon_details["id"]] = mess_queue
+                with self.contact_queue.lock:
+                    self.contact_queue.queue["status" + conditon_details["id"]] = mess_queue
 
                 device_condition_check = DeviceCondition(mess_queue,
                                                         self.condition_satisfied_semaphore,
@@ -75,8 +76,8 @@ class AbstractEventRun(ABC):
                 condition_thread_list.append(device_condition_check_thread)
             elif conditon_details["type"] == "time":
                 mess_queue = Queue()
-                with self.queue_dict_lock:
-                    self.valid_mess_queue["time" + conditon_details["id"]] = mess_queue
+                with self.contact_queue.lock:
+                    self.contact_queue.queue["time" + conditon_details["id"]] = mess_queue
 
                 time_condition_check = TimeCondition(mess_queue,
                                                     self.condition_satisfied_semaphore,

@@ -22,8 +22,7 @@ class XmlReader:
         """
         Creates an XML file with the given root element at the specified path
         """
-        root = ET.Element()
-        root.tag = self.default_root_name
+        root = ET.Element(self.default_root_name)
         tree = ET.ElementTree(root)
-        tree.write(self.file_path)
+        tree.write(self.file_path,encoding='utf-8')
         print(f"Successfully created file {self.file_path}")

@@ -1,10 +1,10 @@
-import xml_reader as xml_reader
-import os
-import xml.etree.ElementTree as ET
-from settings import Settings
+
 from threading import Lock
 
-class miio_DeviceDataXmlReader(xml_reader.XmlReader):
+from settings import Settings
+from xml_reader import XmlReader
+
+class miio_DeviceDataXmlReader(XmlReader):
     def __init__(self, file_path, default_root_name = "devices"):
         self.file_path = file_path
 
@@ -25,7 +25,7 @@ class miio_DeviceDataXmlReader(xml_reader.XmlReader):
 
         return device_list
     
-class broadlink_DeviceDataXmlReader(xml_reader.XmlReader):
+class broadlink_DeviceDataXmlReader(XmlReader):
     def __init__(self, file_path, default_root_name = "devices"):
         self.file_path = file_path
 
@@ -47,11 +47,11 @@ class broadlink_DeviceDataXmlReader(xml_reader.XmlReader):
         return device_list
 
 class AllBrandDeviceDataReader:
-    def __init__(self, lock: Lock) -> None:
+    def __init__(self) -> None:
         self.filepathlist = dict()
         self.filepathlist["mihome"] = Settings.mihome_devicefile_path
         self.filepathlist["broadlink"] = Settings.broadlink_devicefile_path
-        self.lockforfiles = lock
+        self.lockforfiles = Lock()
 
     def get_local_device_list(self):
         devicelist = dict()

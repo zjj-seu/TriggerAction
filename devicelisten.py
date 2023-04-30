@@ -3,6 +3,9 @@
 # 心情好
 from queue import Queue
 from threading import Semaphore
+import time
+import sched
+
 from settings import Settings
 from device_data_xmlreader import miio_DeviceDataXmlReader
 from device_data_xmlreader import AllBrandDeviceDataReader
@@ -10,8 +13,6 @@ from mymihome import MyMiHome
 from mybroadlink import MyBroadLink
 from devicecontroller import DeviceController
 
-import time
-import sched
 
 class DeviceTrigger:
     def __init__(self, devicestatus_queue:Queue, semaphore:Semaphore, trigger:dict) -> None:
@@ -30,12 +31,9 @@ class DeviceTrigger:
 
 
     def run(self):
-        print("[DeviceTrigger] trigger listening activated!!! ")
-        print(f"[DeviceTrigger] This trigger has been raised {self.raise_count} times")
-
+        print(f"[DeviceTrigger] trigger listening activated!!! This trigger has been raised {self.raise_count} times")
         print(f"[DeviceTrigger] trying to get status whose did:{self.device_id}")
         self._devicestatus_queue.put(self.device_id)
-
 
         while self._devicestatus_queue.qsize() < 2:
             pass

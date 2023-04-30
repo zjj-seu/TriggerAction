@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 
+from xml_reader import XmlReader
+
 
 # 更新xml文件的通用类
 # 功能1：create_Element:创建一个节点，指定tag和attrib,tag和attrib存在同一个字典里
@@ -10,6 +12,8 @@ import xml.dom.minidom as minidom
 class xmlUpdater:
     def __init__(self, filepath:str) -> None:
         self._filepath = filepath
+        xmlreader = XmlReader(filepath, "events")
+        
         self._tree = ET.parse(filepath)
         self._root = self._tree.getroot()
 
@@ -30,8 +34,7 @@ class xmlUpdater:
 
     # TODO 未测试
     def add_selected_SubElement(self,fathernode:ET.Element,childrennode:ET.Element):
-        subelement = ET.SubElement(fathernode,tag=childrennode.tag, attrib=childrennode.attrib)
-        subelement.text = childrennode.text
+        fathernode.append(childrennode)
 
 
     def add_to_tree_and_save(self, element:ET.Element):
@@ -84,12 +87,14 @@ class xmlUpdater:
         
         # 如果没有找到相同的结点，则将新结点添加到 root 中
         root.append(new_node)
+        
+    
 
 
 
 def main():
     xmlmanager = xmlUpdater("data_files/example.xml")
-    element =  xmlmanager.create_Element({"name":"book","id":"5"})
+    element =  xmlmanager.create_Element({"tag":"book", "name":"mybook","id":"5"})
     book_data = {"name":"the last of US","year":"2014"}
     xmlmanager.add_SubElements(element,book_data)
     xmlmanager.insert_new_or_update_data(element)

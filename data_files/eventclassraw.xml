@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<classes>
+	<class name="miio.integrations.yeelight.light.yeelight.Yeelight" id = "001">
+        <func id="1">status</func>
+        <func id="2">lightness</func>
+        <func id="3">temperature</func>
+    </class>
+	<class name="broadlink.switch.sp4" id = "002">
+        <func id="1">status</func>
+    </class>
+</classes>

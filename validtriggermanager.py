@@ -3,24 +3,23 @@
 # 可能再分线程
 import sched
 import time
-from settings import Settings
-from threading import Lock
+from threading import Lock,Thread
 import threading
-from threading import Thread
 
+from settings import Settings
 from abstract_event_run import AbstractEventRun
 from device_data_xmlreader import AllBrandDeviceDataReader
+from contactqueue import ContactQueue
+from eventfetch import EventDictAccess
 
 class ValidTriggerManager:
-    def __init__(self, total_event_dict:dict, valid_queue_list:dict, event_dict_lock:Lock, queue_dict_lock:Lock, xmlreader:AllBrandDeviceDataReader) -> None:
-        self._total_event_dict = total_event_dict
-        self._valid_mess_queue = valid_queue_list
-        self._event_dict_lock = event_dict_lock
-        self._queue_dict_lock = queue_dict_lock
+    def __init__(self, contact_queue_access:ContactQueue, event_dict_access:EventDictAccess, xmlreader:AllBrandDeviceDataReader) -> None:
+        
+        self.contact_queue_accessor = contact_queue_access
+        self.event_dict_accessor = event_dict_access
         self.xmlreader = xmlreader
 
         self.thread_manage_table = dict()
-
         self.interval = Settings.event_decode_interval_sec
         self.s = sched.scheduler(time.time, time.sleep)
 
@@ -32,12 +31,13 @@ class ValidTriggerManager:
         thread_id = threading.current_thread().ident
         self.thread_manage_table[event_id] = thread_id
 
-        event = AbstractEventRun(trigger, condition_dict, action_dict, self._valid_mess_queue, self._queue_dict_lock, self.xmlreader)
+        # TODO 
+        event = AbstractEventRun(trigger, condition_dict, action_dict, self.contact_queue_accessor, self.xmlreader)
         event.run()
 
     def decode_event_dict(self):
-        with self._event_dict_lock:
-            for event_id, event in self._total_event_dict.items():
+        with self.event_dict_accessor.lock:
+            for event_id, event in self.event_dict_accessor.eventlist.items():
                 # 如果该事件未激活或者已启动响应线程则跳过
                 # TODO 事件不激活的处理待定
                 if(event["status"] == "off" or event_id in self.thread_manage_table):

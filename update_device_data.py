@@ -1,9 +1,7 @@
-import os
-import xml.etree.ElementTree as ET
-from device_data_xmlreader import miio_DeviceDataXmlReader
-from xml_updater import xmlUpdater
 from miio.cloud import CloudDeviceInfo
 
+from device_data_xmlreader import miio_DeviceDataXmlReader
+from xml_updater import xmlUpdater
 # test
 from micloudconnector import MiCloudConnector
 from midevicemanager import MiDeviceManager
