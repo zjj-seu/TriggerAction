@@ -67,12 +67,35 @@ class AllBrandDeviceDataReader:
         return devicelist
         
 
-    
+"""
+{'317934913_cn': {'name': '台灯', 
+                'did': '317934913', 
+                'ip': '192.168.3.54', 
+                'token': '9490458620e6604d712ccad862bc32b6', 
+                'class': 'miio.integrations.yeelight.light.yeelight.Yeelight'}, 
+'108412119_cn': {'name': '小爱音箱 万能遥控版', 
+                'did': '108412119', 
+                'ip': '192.168.3.64', 
+                'token': '704e665a31787076614f354950436c6f'}, 
+'ir.1543249323641991168_cn': {'name': '空调', 
+                'did': 'ir.1543249323641991168', 
+                'ip': None, 
+                'token': None}, 
+'127049371880428': {'did': '127049371880428', 
+                'name': '博联智能插座', 
+                'ip': '192.168.3.70', 
+                'port': '80', 'mac': 
+                '127049371880428', 
+                'devtype': '30056', 
+                'class': 'broadlink.switch.sp4'}}
+"""
 
 
 
 if __name__ == "__main__":
-    reader = miio_DeviceDataXmlReader("data_files/device_data_broadlink.xml")
-    mylist = reader.get_device_list()
+    
+    filepathlist = {"mihome": Settings.mihome_devicefile_path, "broadlink": Settings.broadlink_devicefile_path}
+    reader = AllBrandDeviceDataReader(filepathlist)
+    mylist = reader.get_local_device_list()
     print(mylist)
     

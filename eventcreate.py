@@ -18,32 +18,47 @@ class EventCreater:
         self.close_event = Event()
         
         
-    def AddEventToFiles(self, new_event:dict):
-        new_event["id"]= self.current_event_id
+    def AddEventToFiles(self):
+        while not self.close_event.is_set():
+            new_event = self.new_event_queue.get()
+            
+            new_event["id"]= self.current_event_id
+            
+            for key, value in new_event["eventdetails"].items():
+                if key == "trigger":
+                    value["id"] = self.current_event_id + value["id"]
+                if key == "conditions":
+                    for condition_key, condition_val in value.items():
+                        condition_key = self.current_event_id + condition_key
+                        condition_val["id"] = self.current_event_id + condition_val["id"]
+                if key == "actions":
+                    for action_key, action_val in value.items():
+                        action_key = self.current_event_id + action_key
+                        action_val["id"] = self.current_event_id + action_val["id"]
+            
+            self._event_access_controller.update_event(new_event)
         
-        for key, value in new_event["eventdetails"].items():
-            if key == "trigger":
-                value["id"] = self.current_event_id + value["id"]
-            if key == "conditions":
-                for condition_key, condition_val in value.items():
-                    condition_key = self.current_event_id + condition_key
-                    condition_val["id"] = self.current_event_id + condition_val["id"]
-            if key == "actions":
-                for action_key, action_val in value.items():
-                    action_key = self.current_event_id + action_key
-                    action_val["id"] = self.current_event_id + action_val["id"]
+    def UpdateEventToFiles(self):
+        old_event = self.old_event_queue.get()
         
-        self._event_access_controller.update_event(new_event)
+        self._event_access_controller.update_event(old_event)
         
     def run(self):
         with self._event_create_queue.lock:
-            self._event_create_queue.queue["create"] = Queue() # 先做增加
-            self._event_create_queue.queue["update"] = Queue()
+            
+            self.new_event_queue = Queue()
+            self._event_create_queue.queue["create"] = self.new_event_queue# 先做增加
+            self.old_event_queue = Queue()
+            self._event_create_queue.queue["update"] = self.old_event_queue
+            
+        a = Thread(target=self.AddEventToFiles)
+        b = Thread(target=self.UpdateEventToFiles)
         
-        while not self.close_event.is_set():
-            new_event_queue:Queue = self._event_create_queue.queue["create"]
-            raw_event = new_event_queue.get()
-            self.AddEventToFiles(raw_event)
+        a.start()
+        b.start()
+        
+        a.join()
+        b.join()
         
         
         

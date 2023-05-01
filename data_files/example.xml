@@ -1,20 +1,20 @@
 <?xml version="1.0" ?>
 <events>
 	<event id="0" name="save energy" status="on">
-		<trigger id="0101" type="status">
+		<trigger id="101" type="status">
 			<targetdevicedid>317934913_cn</targetdevicedid>
 			<targetstatus>off</targetstatus>
 			<targetdevicename>台灯</targetdevicename>
 		</trigger>
 		<conditions>
-			<condition id="0201" type="status">
+			<condition id="201" type="status">
 				<targetdevicedid>127049371880428</targetdevicedid>
 				<targetstatus>on</targetstatus>
 				<targetdevicename>博联智能插座</targetdevicename>
 			</condition>
 		</conditions>
 		<actions>
-			<action id="0301" type="status">
+			<action id="301" type="status">
 				<targetdevicedid>127049371880428</targetdevicedid>
 				<targetstatus>off</targetstatus>
 				<targetdevicename>博联智能插座</targetdevicename>

@@ -70,7 +70,7 @@ class xmlUpdater:
             # 检查结点是否与新结点具有相同的 tag
             if node.tag == new_node.tag:
                 # 检查结点的所有属性是否相同
-                if node.attrib == new_node.attrib:
+                if node.attrib["id"] == new_node.attrib["id"]:
                     # 检查结点的文本内容是否相同
                     if node.text == new_node.text:
                         # 如果结点相同，则什么都不需要做
@@ -79,6 +79,8 @@ class xmlUpdater:
                         # 删除结点的所有子元素
                         node.clear()
                         node.set("id", new_node.attrib["id"])
+                        node.set("name", new_node.attrib["name"])
+                        node.set("status", new_node.attrib["status"])
                         # 将新结点的子元素添加到该结点中
                         for child in new_node:
                             node.append(child)

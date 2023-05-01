@@ -54,7 +54,7 @@ class manager:
 
 def neweventtest(ContactQueue:ContactQueue):
     time.sleep(10)
-    new_event = {'id': '#', 'name': 'save energy', 'status': 'on', 
+    new_event = {'id': '0', 'name': 'save energy', 'status': 'on', 
         'eventdetails': {'trigger': {'type': 'status', 
                                     'id': '101', 
                                     'targetdevicedid': '317934913_cn', 
@@ -71,7 +71,7 @@ def neweventtest(ContactQueue:ContactQueue):
                                                 'targetstatus': 'off', 
                                                 'targetdevicename': '博联智能插座'}}}}
     
-    queue:Queue = ContactQueue.queue["create"]
+    queue:Queue = ContactQueue.queue["update"]
     queue.put(new_event)
 
     
