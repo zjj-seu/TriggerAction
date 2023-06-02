@@ -14,8 +14,8 @@ class Settings:
     test_event_path = "D:/python_env/newTriggerAction/data_files/example.xml"
 
     event_decode_interval_sec = 3
-    trigger_listening_interval_sec = 0.01
-    device_data_check_interval_sec = 0.01
+    trigger_listening_interval_sec = 1
+    device_data_check_interval_sec = 1
     device_server_queue_check_interval_sec = 5
     event_data_update_interval_sec = 1
 

@@ -74,6 +74,8 @@ class DeviceCheckServer:
             queue.put(device_controller.get_status())
             queue.put(device_controller.get_status())
             
+            time.sleep(0.5)
+            
             
     def thread_manager(self):
         """_summary_
@@ -89,7 +91,7 @@ class DeviceCheckServer:
         
         
         print("[DeviceCheckServer.thread_manager] thread management performed one times\"thread table:\n")
-        print(self.thread_table)
+        # print(self.thread_table)
         
         self.s.enter(Settings.device_server_queue_check_interval_sec,1,self.thread_manager,())
         self.s.run()

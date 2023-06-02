@@ -78,7 +78,7 @@ def neweventtest(ContactQueue:ContactQueue):
     
 
 if __name__ == "__main__":
-    eventAccess = EventAccessController(Settings.test_event_path,Settings.eventraw_path, Settings.eventclassraw_path)
+    eventAccess = EventAccessController(Settings.event_path,Settings.eventraw_path, Settings.eventclassraw_path)
     eventDictAccess = EventDictAccess(eventAccess)
     new_event_queue = ContactQueue()
     eventCreate = EventCreater(eventAccess, new_event_queue)
@@ -86,7 +86,7 @@ if __name__ == "__main__":
     xmlreader = AllBrandDeviceDataReader(filepathlist)
 
     m = manager(eventDictAccess, eventAccess, xmlreader,new_event_queue)
-    Thread(target=neweventtest, args=(new_event_queue,)).start()
+    # Thread(target=neweventtest, args=(new_event_queue,)).start()
     
     m.run_threads()
     

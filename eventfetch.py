@@ -128,11 +128,11 @@ class EventFetcher():
         #   time(type):{param1:"targettime"} 
         # }
         for child in self.event_raw_root:
-            print(str(child.tag)+"\t"+str(child.attrib))
+            # print(str(child.tag)+"\t"+str(child.attrib))
             type = child.attrib["name"]
             paramlist = dict()
             for grandchild in child:
-                print(str(grandchild.tag)+"\t"+str(grandchild.attrib)+"\t"+str(grandchild.text))
+                # print(str(grandchild.tag)+"\t"+str(grandchild.attrib)+"\t"+str(grandchild.text))
                 paramlist[grandchild.tag + grandchild.attrib["id"]] = grandchild.text
             eventraw_list[type] = paramlist
         
@@ -176,7 +176,7 @@ class EventFetcher():
         """
         total_events = dict()
         for child in self.event_root:
-            print(str(child.tag)+"\t"+str(child.attrib))
+            # print(str(child.tag)+"\t"+str(child.attrib))
             event_id = child.attrib["id"]
             event_name = child.attrib["name"]
             event_status = child.attrib["status"]
